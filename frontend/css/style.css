@@ -214,3 +214,388 @@ body {
         font-size: 32px;
     }
 }
+/* Баннер со слайдером */
+.hero-slider {
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+}
+
+.slide {
+    display: none;
+    padding: 80px 0;
+    text-align: center;
+    color: white;
+    min-height: 400px;
+    animation: fadeIn 0.8s ease;
+}
+
+.slide.active {
+    display: block;
+}
+
+.slide h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.slide p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    opacity: 0.95;
+}
+
+.slide-controls {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.slide-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    font-size: 24px;
+    padding: 10px 15px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.slide-btn:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.slide-dots {
+    display: flex;
+    gap: 10px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.dot.active {
+    background: white;
+}
+
+/* Блоки секций */
+.section-popular,
+.section-guides-preview,
+.section-advantages,
+.section-reviews,
+.section-stats,
+.section-quick-booking {
+    padding: 60px 0;
+}
+
+.section-popular {
+    background: #f8f9fa;
+}
+
+.section-guides-preview {
+    background: white;
+}
+
+.section-advantages {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+}
+
+.section-advantages h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.section-header h2 {
+    font-size: 32px;
+    color: #2c3e50;
+}
+
+.view-all {
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s;
+}
+
+.view-all:hover {
+    color: #2980b9;
+}
+
+/* Превью туров */
+.tours-preview,
+.guides-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Преимущества */
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.advantage-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s;
+}
+
+.advantage-item:hover {
+    transform: translateY(-10px);
+}
+
+.advantage-icon {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.advantage-item h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.advantage-item p {
+    opacity: 0.8;
+}
+
+/* Отзывы */
+.section-reviews {
+    background: #f8f9fa;
+}
+
+.section-reviews h2 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 40px;
+}
+
+.reviews-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.review-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.review-stars {
+    color: #f1c40f;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.review-card p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.review-author {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.review-date {
+    color: #999;
+    font-size: 14px;
+}
+
+/* Статистика */
+.section-stats {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 48px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.stat-label {
+    font-size: 18px;
+    opacity: 0.9;
+}
+
+/* Быстрое бронирование */
+.section-quick-booking {
+    background: white;
+    text-align: center;
+}
+
+.section-quick-booking h2 {
+    font-size: 36px;
+    color: #2c3e50;
+}
+
+.section-quick-booking p {
+    color: #7f8c8d;
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.quick-booking-form {
+    max-width: 600px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.quick-booking-form input,
+.quick-booking-form select {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    font-size: 16px;
+}
+
+.quick-booking-form input:focus,
+.quick-booking-form select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.quick-booking-form button {
+    grid-column: 1 / -1;
+}
+
+/* Футер */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+.footer-grid h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.footer-grid h4 {
+    margin-bottom: 10px;
+}
+
+.footer-grid p {
+    opacity: 0.8;
+    line-height: 1.6;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.social-links a {
+    color: white;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.3s;
+}
+
+.social-links a:hover {
+    opacity: 1;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 20px;
+    text-align: center;
+    opacity: 0.7;
+}
+
+/* Кнопка в шапке */
+.btn-book-header {
+    background: #f1c40f;
+    color: #1a1a2e;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.3s;
+}
+
+.btn-book-header:hover {
+    transform: scale(1.05);
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .slide h2 {
+        font-size: 28px;
+    }
+    
+    .slide p {
+        font-size: 16px;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+    
+    .quick-booking-form {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .header .container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .nav {
+        order: 3;
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+    
+    .btn-book-header {
+        margin-left: 10px;
+    }
+}

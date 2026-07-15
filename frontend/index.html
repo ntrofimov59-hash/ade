@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🏔️ Adventure Tours - Горные приключения</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
 </head>
 <body>
     <!-- Шапка -->
@@ -14,57 +15,248 @@
                 <h1>🏔️ Adventure Tours</h1>
             </div>
             <nav class="nav">
-    <a href="tours.html">Туры</a>
-    <a href="guides.html">Гиды</a>
-    <a href="rentals.html">Аренда</a>
-    <a href="#contact">Контакты</a>
-</nav>
+                <a href="tours.html">Туры</a>
+                <a href="guides.html">Гиды</a>
+                <a href="rentals.html">Аренда</a>
+                <a href="#reviews">Отзывы</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+            <button class="btn-book-header" onclick="openBookingModal()">📅 Забронировать</button>
         </div>
     </header>
 
-    <!-- Главный баннер -->
-    <section class="hero">
-        <div class="container">
-            <h2>Открой горы с нами!</h2>
-            <p>Гастротуризм, восхождения, аренда транспорта и гиды</p>
-            <button class="btn-primary" onclick="alert('Скоро тут будет бронирование! 🏔️')">Забронировать</button>
+    <!-- Баннер с ротацией -->
+    <section class="hero-slider" id="heroSlider">
+        <div class="slide active" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+            <div class="container">
+                <h2>Открой горы с нами! 🏔️</h2>
+                <p>Восхождения, гастротуризм и незабываемые приключения</p>
+                <button class="btn-primary" onclick="openBookingModal()">Забронировать тур</button>
+            </div>
+        </div>
+        <div class="slide" style="background: linear-gradient(135deg, #2c3e50, #3498db);">
+            <div class="container">
+                <h2>Гастрономические туры 🍷</h2>
+                <p>Дегустации лучших сыров и вин Кавказа</p>
+                <button class="btn-primary" onclick="location.href='tours.html'">Выбрать тур</button>
+            </div>
+        </div>
+        <div class="slide" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+            <div class="container">
+                <h2>Аренда транспорта 🚗</h2>
+                <p>Внедорожники, байки и велосипеды для гор</p>
+                <button class="btn-primary" onclick="location.href='rentals.html'">Выбрать транспорт</button>
+            </div>
+        </div>
+        <div class="slide-controls">
+            <button class="slide-btn" onclick="changeSlide(-1)">❮</button>
+            <div class="slide-dots">
+                <span class="dot active" onclick="goToSlide(0)"></span>
+                <span class="dot" onclick="goToSlide(1)"></span>
+                <span class="dot" onclick="goToSlide(2)"></span>
+            </div>
+            <button class="slide-btn" onclick="changeSlide(1)">❯</button>
         </div>
     </section>
 
-    <!-- Bento Box Grid -->
-    <section class="bento-grid container">
-        <div class="bento-item item-1">
-            <h3>🏔️ Восхождения</h3>
-            <p>Эльбрус, Казбек, Белуха</p>
+    <!-- Блок "Популярные туры" -->
+    <section class="section-popular" id="popularTours">
+        <div class="container">
+            <div class="section-header">
+                <h2>🔥 Популярные туры</h2>
+                <a href="tours.html" class="view-all">Смотреть все →</a>
+            </div>
+            <div class="tours-preview" id="toursPreview">
+                <div class="loading">Загрузка...</div>
+            </div>
         </div>
-        <div class="bento-item item-2">
-            <h3>🍷 Гастротуризм</h3>
-            <p>Дегустации и фермерские продукты</p>
+    </section>
+
+    <!-- Блок "Наши гиды" -->
+    <section class="section-guides-preview" id="guidesPreview">
+        <div class="container">
+            <div class="section-header">
+                <h2>🧭 Лучшие гиды</h2>
+                <a href="guides.html" class="view-all">Все гиды →</a>
+            </div>
+            <div class="guides-preview-grid" id="guidesPreviewGrid">
+                <div class="loading">Загрузка...</div>
+            </div>
         </div>
-        <div class="bento-item item-3">
-            <h3>🚗 Аренда авто</h3>
-            <p>Внедорожники для гор</p>
+    </section>
+
+    <!-- Блок "Почему мы" -->
+    <section class="section-advantages">
+        <div class="container">
+            <h2>Почему выбирают нас</h2>
+            <div class="advantages-grid">
+                <div class="advantage-item">
+                    <div class="advantage-icon">🏔️</div>
+                    <h3>Безопасность</h3>
+                    <p>Страховка и опытные гиды</p>
+                </div>
+                <div class="advantage-item">
+                    <div class="advantage-icon">⭐</div>
+                    <h3>Лучшие гиды</h3>
+                    <p>Только профессионалы с опытом</p>
+                </div>
+                <div class="advantage-item">
+                    <div class="advantage-icon">💰</div>
+                    <h3>Лучшие цены</h3>
+                    <p>Прямые контакты с поставщиками</p>
+                </div>
+                <div class="advantage-item">
+                    <div class="advantage-icon">📞</div>
+                    <h3>Поддержка 24/7</h3>
+                    <p>Поможем в любой ситуации</p>
+                </div>
+            </div>
         </div>
-        <div class="bento-item item-4">
-            <h3>🏍️ Байки и велосипеды</h3>
-            <p>Эндуро и горные велосипеды</p>
+    </section>
+
+    <!-- Блок "Отзывы" -->
+    <section class="section-reviews" id="reviews">
+        <div class="container">
+            <h2>⭐ Отзывы наших клиентов</h2>
+            <div class="reviews-carousel" id="reviewsCarousel">
+                <div class="review-card">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Незабываемое путешествие! Гид Алексей - профессионал своего дела. Обязательно вернемся!"</p>
+                    <div class="review-author">Анна С.</div>
+                    <div class="review-date">Июль 2025</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Гастротур превзошел все ожидания! Вкуснейшие сыры и винодельни. Спасибо Марии за организацию!"</p>
+                    <div class="review-author">Дмитрий К.</div>
+                    <div class="review-date">Август 2025</div>
+                </div>
+                <div class="review-card">
+                    <div class="review-stars">⭐⭐⭐⭐⭐</div>
+                    <p>"Взяли внедорожник в аренду на неделю. Машина в идеальном состоянии, отличный сервис!"</p>
+                    <div class="review-author">Елена М.</div>
+                    <div class="review-date">Сентябрь 2025</div>
+                </div>
+            </div>
         </div>
-        <div class="bento-item item-5">
-            <h3>🧭 Гиды</h3>
-            <p>Опытные инструкторы</p>
+    </section>
+
+    <!-- Блок "Статистика" -->
+    <section class="section-stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" data-target="150">0</div>
+                    <div class="stat-label">Туров проведено</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="25">0</div>
+                    <div class="stat-label">Гидов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="500">0</div>
+                    <div class="stat-label">Довольных клиентов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-target="98">0</div>
+                    <div class="stat-label">% Позитивных отзывов</div>
+                </div>
+            </div>
         </div>
-        <div class="bento-item item-6">
-            <h3>🚐 Трансфер</h3>
-            <p>Встреча в аэропорту</p>
+    </section>
+
+    <!-- Блок "Быстрое бронирование" -->
+    <section class="section-quick-booking" id="quickBooking">
+        <div class="container">
+            <h2>📅 Быстрое бронирование</h2>
+            <p>Оставьте заявку и мы подберем идеальный тур для вас</p>
+            <form id="quickBookingForm" class="quick-booking-form">
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Телефон" required>
+                <input type="email" placeholder="Email (необязательно)">
+                <select required>
+                    <option value="">Выберите тип услуги</option>
+                    <option value="tour">Тур</option>
+                    <option value="guide">Гид</option>
+                    <option value="rental">Аренда</option>
+                    <option value="transfer">Трансфер</option>
+                </select>
+                <button type="submit" class="btn-primary">Отправить заявку</button>
+            </form>
         </div>
     </section>
 
     <!-- Футер -->
-    <footer class="footer">
+    <footer class="footer" id="contact">
         <div class="container">
-            <p>© 2026 Adventure Tours. Все права защищены.</p>
+            <div class="footer-grid">
+                <div>
+                    <h3>🏔️ Adventure Tours</h3>
+                    <p>Горные приключения для настоящих искателей</p>
+                </div>
+                <div>
+                    <h4>Контакты</h4>
+                    <p>📞 +7 (999) 123-45-67</p>
+                    <p>📧 info@adventure-tours.ru</p>
+                </div>
+                <div>
+                    <h4>Мы в соцсетях</h4>
+                    <div class="social-links">
+                        <a href="#">📱 Telegram</a>
+                        <a href="#">📸 Instagram</a>
+                        <a href="#">👍 VK</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Adventure Tours. Все права защищены.</p>
+            </div>
         </div>
     </footer>
+
+    <!-- Модальное окно бронирования -->
+    <div class="modal-overlay" id="bookingModal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeBookingModal()">✕</span>
+            <h2>📅 Забронировать</h2>
+            <form id="bookingForm" class="modal-form">
+                <div class="form-group">
+                    <label>Ваше имя *</label>
+                    <input type="text" id="modalName" required placeholder="Иван Иванов">
+                </div>
+                <div class="form-group">
+                    <label>Телефон *</label>
+                    <input type="tel" id="modalPhone" required placeholder="+7 999 123-45-67">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="modalEmail" placeholder="ivan@mail.ru">
+                </div>
+                <div class="form-group">
+                    <label>Тип услуги *</label>
+                    <select id="modalServiceType" required>
+                        <option value="tour">Тур</option>
+                        <option value="guide">Гид</option>
+                        <option value="rental">Аренда</option>
+                        <option value="transfer">Трансфер</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Дата *</label>
+                    <input type="date" id="modalDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Количество человек</label>
+                    <input type="number" id="modalPeople" min="1" value="1">
+                </div>
+                <div class="form-group">
+                    <label>Комментарий</label>
+                    <textarea id="modalComment" rows="3" placeholder="Ваши пожелания..."></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width:100%;">Отправить заявку</button>
+            </form>
+        </div>
+    </div>
 
     <script src="js/main.js"></script>
 </body>
