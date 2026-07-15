@@ -1,0 +1,216 @@
+/* Общие стили */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    color: #1a1a2e;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Шапка */
+.header {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #f1c40f;
+}
+
+/* Герой */
+.hero {
+    background: linear-gradient(135deg, #2c3e50, #3498db);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background: #f1c40f;
+    color: #1a1a2e;
+    border: none;
+    padding: 15px 40px;
+    font-size: 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(241, 196, 15, 0.4);
+}
+
+/* Bento Grid */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 60px 0;
+}
+
+.bento-item {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    transition: transform 0.3s, box-shadow 0.3s;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.bento-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.bento-item h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #2c3e50;
+}
+
+.bento-item p {
+    color: #7f8c8d;
+    font-size: 16px;
+}
+
+/* Разные размеры для Bento Box */
+.item-1 {
+    grid-column: span 2;
+    grid-row: span 2;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: white;
+}
+
+.item-1 h3, .item-1 p {
+    color: white;
+}
+
+.item-2 {
+    grid-column: span 1;
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+}
+
+.item-2 h3, .item-2 p {
+    color: white;
+}
+
+.item-3 {
+    grid-column: span 1;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+}
+
+.item-3 h3, .item-3 p {
+    color: white;
+}
+
+.item-4 {
+    grid-column: span 2;
+    background: linear-gradient(135deg, #f39c12, #e67e22);
+    color: white;
+}
+
+.item-4 h3, .item-4 p {
+    color: white;
+}
+
+.item-5 {
+    grid-column: span 1;
+    background: linear-gradient(135deg, #9b59b6, #8e44ad);
+    color: white;
+}
+
+.item-5 h3, .item-5 p {
+    color: white;
+}
+
+.item-6 {
+    grid-column: span 1;
+    background: linear-gradient(135deg, #1abc9c, #16a085);
+    color: white;
+}
+
+.item-6 h3, .item-6 p {
+    color: white;
+}
+
+/* Футер */
+.footer {
+    background: #1a1a2e;
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .item-1, .item-2, .item-3, .item-4, .item-5, .item-6 {
+        grid-column: span 1;
+        grid-row: span 1;
+    }
+    
+    .header .container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .nav a {
+        margin: 0 15px;
+    }
+    
+    .hero h2 {
+        font-size: 32px;
+    }
+}
