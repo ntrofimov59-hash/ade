@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📝 Блог о горных путешествиях | Adventure Tours</title>
+    <meta name="description" content="Статьи о горных турах, восхождениях, гастротуризме и путешествиях по Кавказу. Советы, маршруты, лайфхаки.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo"><a href="index.html"><h1>🏔️ Adventure Tours</h1></a></div>
+            <nav class="nav">
+                <a href="tours.html">Туры</a>
+                <a href="guides.html">Гиды</a>
+                <a href="rentals.html">Аренда</a>
+                <a href="blog.html" class="active">Блог</a>
+                <a href="#contact">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h2>📝 Блог о горных приключениях</h2>
+            <p>Советы, маршруты и лайфхаки от наших гидов</p>
+        </div>
+    </section>
+
+    <section class="blog-grid container">
+        <div class="blog-post">
+            <div class="blog-image">🏔️</div>
+            <div class="blog-content">
+                <div class="blog-meta">15 июля 2026 • 5 мин чтения</div>
+                <h3>Как подготовиться к восхождению на Эльбрус</h3>
+                <p>Подробный гайд по физической подготовке, снаряжению и акклиматизации для первого восхождения на высочайшую вершину Европы.</p>
+                <a href="#" class="read-more">Читать →</a>
+            </div>
+        </div>
+        
+        <div class="blog-post">
+            <div class="blog-image">🍷</div>
+            <div class="blog-content">
+                <div class="blog-meta">10 июля 2026 • 4 мин чтения</div>
+                <h3>Гастрономический гид по Кавказу: что попробовать</h3>
+                <p>Лучшие блюда и напитки кавказской кухни, которые стоит попробовать в гастрономическом туре. От хинкали до домашнего вина.</p>
+                <a href="#" class="read-more">Читать →</a>
+            </div>
+        </div>
+        
+        <div class="blog-post">
+            <div class="blog-image">🚗</div>
+            <div class="blog-content">
+                <div class="blog-meta">5 июля 2026 • 3 мин чтения</div>
+                <h3>Как выбрать внедорожник для горных дорог</h3>
+                <p>Советы по выбору транспорта для путешествий по горным дорогам Кавказа. На что обратить внимание при аренде.</p>
+                <a href="#" class="read-more">Читать →</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3>🏔️ Adventure Tours</h3>
+                    <p>Горные приключения для настоящих искателей</p>
+                </div>
+                <div>
+                    <h4>Контакты</h4>
+                    <p>📞 +7 (999) 123-45-67</p>
+                    <p>📧 info@adventure-tours.ru</p>
+                </div>
+                <div>
+                    <h4>Мы в соцсетях</h4>
+                    <div class="social-links">
+                        <a href="#">📱 Telegram</a>
+                        <a href="#">📸 Instagram</a>
+                        <a href="#">👍 VK</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Adventure Tours. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .blog-grid {
+            display: grid;
+            gap: 30px;
+            padding: 40px 0 60px;
+        }
+        .blog-post {
+            display: flex;
+            gap: 30px;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+        }
+        .blog-post:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+        .blog-image {
+            font-size: 60px;
+            min-width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+        .blog-content {
+            flex: 1;
+        }
+        .blog-meta {
+            color: #999;
+            font-size: 14px;
+        }
+        .blog-content h3 {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+        .read-more {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .read-more:hover {
+            color: #2980b9;
+        }
+        @media (max-width: 768px) {
+            .blog-post {
+                flex-direction: column;
+            }
+            .blog-image {
+                min-width: auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</body>
+</html>

@@ -151,7 +151,44 @@ app.delete('/api/rentals/:id', (req, res) => {
 app.get('/api/reviews', (req, res) => {
     res.json([]);
 });
+// ==================== SEO: ЧПУ (Clean URLs) ====================
+app.get('/tours', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/tours.html'));
+});
 
+app.get('/guides', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/guides.html'));
+});
+
+app.get('/rentals', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/rentals.html'));
+});
+
+app.get('/blog', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/blog.html'));
+});
+
+// ==================== SEO: Robots.txt ====================
+app.get('/robots.txt', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/robots.txt'));
+});
+
+// ==================== SEO: Sitemap.xml ====================
+app.get('/sitemap.xml', (req, res) => {
+    res.sendFile(path.join(__dirname, '../frontend/sitemap.xml'));
+});
+// ==================== Языковые версии (SEO clean URLs) ====================
+// Любой /en/... или /ru/... отдаёт тот же файл, что и без префикса.
+// Пример: /en/tours.html -> frontend/tours.html, /ru/ -> frontend/index.html
+app.get(/^\/(en|ru)(\/.*)?$/, (req, res, next) => {
+    const rest = req.params[1] || '/';
+    const relativePath = rest === '/' ? 'index.html' : rest.slice(1);
+    const filePath = path.join(__dirname, '../frontend', relativePath);
+
+    res.sendFile(filePath, (err) => {
+        if (err) next(); // файла нет — передаём дальше, получим обычный 404
+    });
+});
 // Запуск сервера
 app.listen(PORT, () => {
     console.log(`🚀 Сервер запущен на http://localhost:${PORT}`);

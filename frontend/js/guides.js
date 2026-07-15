@@ -1,3 +1,4 @@
+// Загрузка гидов
 async function loadGuides() {
     try {
         const response = await fetch('/api/guides');
@@ -5,23 +6,26 @@ async function loadGuides() {
         renderGuides(guides);
     } catch (error) {
         console.error('Ошибка загрузки гидов:', error);
-        document.getElementById('guidesContainer').innerHTML = 
+        document.getElementById('guidesContainer').innerHTML =
             '<div class="loading">❌ Ошибка загрузки гидов</div>';
     }
 }
 
+// Отображение гидов
 function renderGuides(guides) {
     const container = document.getElementById('guidesContainer');
-    
+
     if (guides.length === 0) {
         container.innerHTML = '<div class="loading">😕 Гиды не найдены</div>';
         return;
     }
-    
+
     container.innerHTML = guides.map(guide => `
         <div class="card">
-            <div class="card-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                🧭
+            <div class="card-image" style="${guide.photo
+                ? `background-image:url('${guide.photo}');background-size:cover;background-position:center;`
+                : 'background: linear-gradient(135deg, #667eea, #764ba2);'}">
+                ${guide.photo ? '' : '🧭'}
             </div>
             <div class="card-content">
                 <h3>${guide.name}</h3>
@@ -39,28 +43,27 @@ function renderGuides(guides) {
     `).join('');
 }
 
+// Бронирование гида
 function bookGuide(id, name) {
-    const userName = prompt('Введите ваше имя:');
-    if (!userName) return;
+    const clientName = prompt('Введите ваше имя:');
+    if (!clientName) return;
     const phone = prompt('Введите ваш телефон:');
     if (!phone) return;
-    const date = prompt('Введите дату (ГГГГ-ММ-ДД):');
-    if (!date) return;
-    
+
     fetch('/api/bookings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            user_name: userName,
+            user_name: clientName,
             user_phone: phone,
             service_type: 'guide',
             service_id: id,
-            booking_date: date
+            booking_date: new Date().toISOString().split('T')[0]
         })
     })
     .then(res => res.json())
     .then(data => {
-        alert(`✅ Гид ${name} забронирован! ID: ${data.booking_id}`);
+        alert(`✅ Заявка отправлена! ID: ${data.booking_id}\nГид: ${name}`);
     })
     .catch(err => {
         alert('❌ Ошибка бронирования');
@@ -68,4 +71,6 @@ function bookGuide(id, name) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', loadGuides);
+document.addEventListener('DOMContentLoaded', () => {
+    loadGuides();
+});

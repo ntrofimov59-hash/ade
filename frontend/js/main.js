@@ -42,11 +42,14 @@ async function loadPopularTours() {
             return;
         }
         
-        container.innerHTML = popular.map(tour => `
+container.innerHTML = popular.map(tour => `
             <div class="card" onclick="location.href='tours.html'">
-                <div class="card-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                    ${getEmojiForType(tour.type)}
+                <div class="card-image" style="${tour.image 
+                    ? `background-image:url('${tour.image}');background-size:cover;background-position:center;` 
+                    : 'background: linear-gradient(135deg, #667eea, #764ba2);'}">
+                    ${tour.image ? '' : getEmojiForType(tour.type)}
                 </div>
+
                 <div class="card-content">
                     <span class="tag">${getTypeLabel(tour.type)}</span>
                     <h3>${tour.title}</h3>
@@ -102,8 +105,10 @@ async function loadGuidesPreview() {
         
         container.innerHTML = topGuides.map(guide => `
             <div class="card" onclick="location.href='guides.html'">
-                <div class="card-image" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-                    🧭
+                <<div class="card-image" style="${guide.photo 
+                    ? `background-image:url('${guide.photo}');background-size:cover;background-position:center;` 
+                    : 'background: linear-gradient(135deg, #667eea, #764ba2);'}">
+                    ${guide.photo ? '' : '🧭'}
                 </div>
                 <div class="card-content">
                     <h3>${guide.name}</h3>

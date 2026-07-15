@@ -3,9 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏔️ Adventure Tours - Горные приключения</title>
+
+    <!-- Основные SEO метатеги -->
+    <title>🏔️ Adventure Tours | Горные туры, гиды и аренда на Кавказе</title>
+    <meta name="description" content="Adventure Tours - организация горных туров, восхождений, гастротуризма и аренды транспорта на Кавказе. Профессиональные гиды, безопасность и лучшие цены.">
+    <meta name="keywords" content="горные туры, восхождение на Эльбрус, гастротуризм, аренда внедорожников, гиды Кавказ, треккинг, экскурсии">
+    <meta name="author" content="Adventure Tours">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://adventure-tours.ru/">
+    <!-- НОВОЕ: hreflang — подсказка поисковикам про языковые версии страницы -->
+    <link rel="alternate" hreflang="ru" href="https://adventure-tours.ru/ru/">
+    <link rel="alternate" hreflang="en" href="https://adventure-tours.ru/en/">
+    <link rel="alternate" hreflang="x-default" href="https://adventure-tours.ru/en/">
+
+    <!-- Open Graph для соцсетей -->
+    <meta property="og:title" content="🏔️ Adventure Tours - Горные приключения на Кавказе">
+    <meta property="og:description" content="Организация горных туров, восхождений, гастротуризма и аренды транспорта. Профессиональные гиды и лучшие цены.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://adventure-tours.ru/">
+    <meta property="og:image" content="https://adventure-tours.ru/images/og-image.jpg">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Adventure Tours - Горные приключения">
+    <meta name="twitter:description" content="Горные туры, гиды и аренда на Кавказе">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏔️</text></svg>">
+
+    <!-- Schema.org разметка -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "Adventure Tours",
+        "description": "Организация горных туров, восхождений и гастротуризма на Кавказе",
+        "telephone": "+7-999-123-45-67",
+        "email": "info@adventure-tours.ru",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Москва",
+            "addressCountry": "RU"
+        },
+        "url": "https://adventure-tours.ru",
+        "priceRange": "₽₽",
+        "sameAs": [
+            "https://t.me/adventure_tours",
+            "https://instagram.com/adventure_tours"
+        ]
+    }
+    </script>
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <!-- НОВОЕ: стили для блока "О нас" и галереи -->
+    <link rel="stylesheet" href="css/content.css">
 </head>
 <body>
     <!-- Шапка -->
@@ -15,37 +68,40 @@
                 <h1>🏔️ Adventure Tours</h1>
             </div>
             <nav class="nav">
-                <a href="tours.html">Туры</a>
-                <a href="guides.html">Гиды</a>
-                <a href="rentals.html">Аренда</a>
-                <a href="#reviews">Отзывы</a>
-                <a href="#contact">Контакты</a>
+                <a href="tours.html" data-i18n="nav.tours">Туры</a>
+                <a href="guides.html" data-i18n="nav.guides">Гиды</a>
+                <a href="rentals.html" data-i18n="nav.rentals">Аренда</a>
+                <a href="#about" data-i18n="nav.about">О нас</a>
+                <a href="#reviews" data-i18n="nav.reviews">Отзывы</a>
+                <a href="#contact" data-i18n="nav.contact">Контакты</a>
             </nav>
-            <button class="btn-book-header" onclick="openBookingModal()">📅 Забронировать</button>
+            <!-- НОВОЕ: переключатель языка, заполняется через i18n.js -->
+            <div id="langSwitcher" class="lang-switcher"></div>
+            <button class="btn-book-header" onclick="openBookingModal()" data-i18n="nav.book">📅 Забронировать</button>
         </div>
     </header>
 
-    <!-- Баннер с ротацией -->
+    <!-- Баннер с ротацией: ИЗМЕНЕНО — теперь с реальными фото вместо плоских градиентов -->
     <section class="hero-slider" id="heroSlider">
-        <div class="slide active" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+        <div class="slide active" style="background-image: linear-gradient(rgba(20,20,35,0.55), rgba(20,20,35,0.65)), url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
             <div class="container">
-                <h2>Открой горы с нами! 🏔️</h2>
-                <p>Восхождения, гастротуризм и незабываемые приключения</p>
-                <button class="btn-primary" onclick="openBookingModal()">Забронировать тур</button>
+                <h2 data-i18n="hero.slide1_title">Открой горы с нами! 🏔️</h2>
+                <p data-i18n="hero.slide1_text">Восхождения, гастротуризм и незабываемые приключения на Кавказе</p>
+                <button class="btn-primary" onclick="openBookingModal()" data-i18n="hero.slide1_btn">Забронировать тур</button>
             </div>
         </div>
-        <div class="slide" style="background: linear-gradient(135deg, #2c3e50, #3498db);">
+        <div class="slide" style="background-image: linear-gradient(rgba(20,20,35,0.5), rgba(20,20,35,0.6)), url('https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
             <div class="container">
-                <h2>Гастрономические туры 🍷</h2>
-                <p>Дегустации лучших сыров и вин Кавказа</p>
-                <button class="btn-primary" onclick="location.href='tours.html'">Выбрать тур</button>
+                <h2 data-i18n="hero.slide2_title">Гастрономические туры 🍷</h2>
+                <p data-i18n="hero.slide2_text">Дегустации лучших сыров и вин Кавказа</p>
+                <button class="btn-primary" onclick="location.href='tours.html'" data-i18n="hero.slide2_btn">Выбрать тур</button>
             </div>
         </div>
-        <div class="slide" style="background: linear-gradient(135deg, #e74c3c, #c0392b);">
+        <div class="slide" style="background-image: linear-gradient(rgba(20,20,35,0.5), rgba(20,20,35,0.65)), url('https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;">
             <div class="container">
-                <h2>Аренда транспорта 🚗</h2>
-                <p>Внедорожники, байки и велосипеды для гор</p>
-                <button class="btn-primary" onclick="location.href='rentals.html'">Выбрать транспорт</button>
+                <h2 data-i18n="hero.slide3_title">Аренда транспорта 🚗</h2>
+                <p data-i18n="hero.slide3_text">Внедорожники, байки и велосипеды для гор</p>
+                <button class="btn-primary" onclick="location.href='rentals.html'" data-i18n="hero.slide3_btn">Выбрать транспорт</button>
             </div>
         </div>
         <div class="slide-controls">
@@ -56,6 +112,35 @@
                 <span class="dot" onclick="goToSlide(2)"></span>
             </div>
             <button class="slide-btn" onclick="changeSlide(1)">❯</button>
+        </div>
+    </section>
+
+    <!-- НОВЫЙ БЛОК: О нас -->
+    <section class="section-about" id="about">
+        <div class="container about-grid">
+            <div class="about-photo">
+                <img src="https://images.unsplash.com/photo-1522163182402-834f871fd851?auto=format&fit=crop&w=900&q=80" alt="Гид Adventure Tours в горах Кавказа" loading="lazy">
+            </div>
+            <div class="about-text">
+                <span class="tag" data-i18n="about.tag">С 2016 года в горах</span>
+                <h2 data-i18n="about.title">Мы живём в горах — и делимся ими с вами</h2>
+                <p data-i18n="about.text1">Adventure Tours начинался с небольшой группы гидов-энтузиастов, которые водили друзей на Эльбрус в свободное от основной работы время. Сегодня это команда из 25 сертифицированных инструкторов, которая ежегодно проводит более 150 туров — от лёгких прогулок выходного дня до серьёзных восхождений.</p>
+                <p data-i18n="about.text2">Мы не работаем по шаблону: каждый маршрут собирается под конкретную группу — уровень подготовки, темп, интересы. Если вы хотите не просто "посмотреть на горы", а прожить в них несколько дней — это к нам.</p>
+                <div class="about-points">
+                    <div class="about-point">
+                        <strong data-i18n="about.point1_num">25</strong>
+                        <span data-i18n="about.point1_label">сертифицированных гидов</span>
+                    </div>
+                    <div class="about-point">
+                        <strong data-i18n="about.point2_num">9</strong>
+                        <span data-i18n="about.point2_label">лет на маршрутах Кавказа</span>
+                    </div>
+                    <div class="about-point">
+                        <strong data-i18n="about.point3_num">500+</strong>
+                        <span data-i18n="about.point3_label">довольных путешественников</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -85,32 +170,64 @@
         </div>
     </section>
 
+    <!-- НОВЫЙ БЛОК: Галерея -->
+    <section class="section-gallery" id="gallery">
+        <div class="container">
+            <div class="section-header">
+                <h2>📸 Кавказ в кадрах</h2>
+                <span class="view-all" style="opacity:.7;cursor:default;">Фото с наших маршрутов</span>
+            </div>
+            <div class="gallery-grid">
+                <div class="gallery-item item-tall">
+                    <img src="https://images.unsplash.com/photo-1464817739973-0128fe77aaa1?auto=format&fit=crop&w=800&q=80" alt="Восхождение на Эльбрус" loading="lazy">
+                    <span class="gallery-caption">Восхождение на Эльбрус</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80" alt="Треккинг в горах" loading="lazy">
+                    <span class="gallery-caption">Треккинг по ущельям</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1510970044939-070d2c30c1a5?auto=format&fit=crop&w=800&q=80" alt="Гастротур: сыр и вино" loading="lazy">
+                    <span class="gallery-caption">Гастротур: сыр и вино</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1533130061792-64b345e4a833?auto=format&fit=crop&w=800&q=80" alt="Аренда внедорожника" loading="lazy">
+                    <span class="gallery-caption">Внедорожники для гор</span>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80" alt="Лагерь в горах" loading="lazy">
+                    <span class="gallery-caption">Ночёвка под звёздами</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Блок "Почему мы" -->
     <section class="section-advantages">
         <div class="container">
-            <h2>Почему выбирают нас</h2>
-            <div class="advantages-grid">
-                <div class="advantage-item">
-                    <div class="advantage-icon">🏔️</div>
-                    <h3>Безопасность</h3>
-                    <p>Страховка и опытные гиды</p>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">⭐</div>
-                    <h3>Лучшие гиды</h3>
-                    <p>Только профессионалы с опытом</p>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">💰</div>
-                    <h3>Лучшие цены</h3>
-                    <p>Прямые контакты с поставщиками</p>
-                </div>
-                <div class="advantage-item">
-                    <div class="advantage-icon">📞</div>
-                    <h3>Поддержка 24/7</h3>
-                    <p>Поможем в любой ситуации</p>
-                </div>
-            </div>
+        <h2>Почему выбирают нас</h2>
+        <div class="advantages-grid">
+        <div class="advantage-item">
+            <div class="advantage-icon">🏔️</div>
+            <h3>Безопасность превыше всего</h3>
+            <p>Все наши туры проходят с обязательной страховкой и сопровождением опытных гидов с международными сертификатами.</p>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">⭐</div>
+            <h3>Только лучшие гиды</h3>
+            <p>Наши инструкторы - действующие альпинисты и спасатели МЧС с опытом более 10 лет работы в горах.</p>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">💰</div>
+            <h3>Лучшие цены</h3>
+            <p>Работаем напрямую с горными отелями и местными гидами, без посредников и наценок.</p>
+        </div>
+        <div class="advantage-item">
+            <div class="advantage-icon">📞</div>
+            <h3>Поддержка 24/7</h3>
+            <p>Круглосуточная поддержка на маршруте. На связи с вами в любой ситуации.</p>
+        </div>
+        </div>
         </div>
     </section>
 
@@ -258,6 +375,8 @@
         </div>
     </div>
 
+    <!-- НОВОЕ: язык/валюта — подключаем до main.js -->
+    <script src="js/i18n.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

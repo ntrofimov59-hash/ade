@@ -1,0 +1,49 @@
+{
+    "meta": {
+        "title": "🏔️ Adventure Tours | Mountain Tours, Guides & Rentals in the Caucasus",
+        "description": "Adventure Tours - guided mountain climbing, trekking, food tours and vehicle rentals in the Caucasus Mountains."
+    },
+    "nav": {
+        "tours": "Tours",
+        "guides": "Guides",
+        "rentals": "Rentals",
+        "about": "About",
+        "reviews": "Reviews",
+        "contact": "Contact",
+        "book": "📅 Book Now"
+    },
+    "hero": {
+        "slide1_title": "Discover the mountains with us! 🏔️",
+        "slide1_text": "Climbs, food tours and unforgettable adventures",
+        "slide1_btn": "Book a Tour",
+        "slide2_title": "Food & Wine Tours 🍷",
+        "slide2_text": "Tastings of the finest local cheese and wine",
+        "slide2_btn": "Choose a Tour",
+        "slide3_title": "Vehicle Rentals 🚗",
+        "slide3_text": "4x4s, motorbikes and bicycles for the mountains",
+        "slide3_btn": "Choose a Vehicle"
+    },
+    "about": {
+        "tag": "In the mountains since 2016",
+        "title": "We live in these mountains — and we share them with you",
+        "text1": "Adventure Tours started as a small group of passionate guides. Today it's a team of 25 certified instructors running over 150 tours a year.",
+        "text2": "We don't work from a template: every route is built around the specific group.",
+        "point1_num": "25", "point1_label": "certified guides",
+        "point2_num": "9", "point2_label": "years on the trails",
+        "point3_num": "500+", "point3_label": "happy travelers"
+    },
+    "sections": {
+        "popular_tours": "🔥 Popular Tours",
+        "view_all": "View all →",
+        "best_guides": "🧭 Top Guides",
+        "gallery": "📸 The Caucasus in pictures",
+        "reviews": "⭐ Traveler Reviews",
+        "quick_booking_title": "📅 Quick Booking",
+        "quick_booking_text": "Leave a request and we'll find the perfect tour for you"
+    },
+    "currency": {
+        "code": "USD",
+        "symbol": "$",
+        "rate_from_rub": 0.011
+    }
+}

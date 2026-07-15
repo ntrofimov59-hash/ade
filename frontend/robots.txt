@@ -1,0 +1,8 @@
+# robots.txt для Adventure Tours
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /admin-safe.html
+Disallow: /api/
+
+Sitemap: https://adventure-tours.ru/sitemap.xml

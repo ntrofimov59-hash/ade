@@ -31,8 +31,10 @@ function renderTours(tours) {
     
     container.innerHTML = tours.map(tour => `
         <div class="card">
-            <div class="card-image">
-                ${getEmojiForType(tour.type)}
+            <div class="card-image" style="${tour.image 
+                ? `background-image:url('${tour.image}');background-size:cover;background-position:center;` 
+                : ''}">
+                ${tour.image ? '' : getEmojiForType(tour.type)}
             </div>
             <div class="card-content">
                 <span class="tag">${getTypeLabel(tour.type)}</span>
