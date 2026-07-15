@@ -40,7 +40,7 @@
             </nav>
             <div class="admin-user">
                 <span>👤 Администратор</span>
-                <button onclick="logout()" class="btn-logout">🚪 Выйти</button>
+                <button id="logoutBtn" class="btn-logout">🚪 Выйти</button>
             </div>
         </aside>
 
@@ -51,7 +51,7 @@
                 <div class="admin-header">
                     <h1>📊 Дашборд</h1>
                     <div class="admin-actions">
-                        <button onclick="refreshData()" class="btn-refresh">🔄 Обновить</button>
+                        <button id="refreshBtn" class="btn-refresh">🔄 Обновить</button>
                     </div>
                 </div>
                 <div class="stats-cards" id="statsCards">
@@ -103,7 +103,7 @@
             <div id="tours" class="tab-content">
                 <div class="admin-header">
                     <h1>🏔️ Управление турами</h1>
-                    <button class="btn-add" onclick="openTourForm()">➕ Добавить тур</button>
+                    <button id="addTourBtn" class="btn-add">➕ Добавить тур</button>
                 </div>
                 <div class="table-container">
                     <table id="toursTable">
@@ -128,7 +128,7 @@
             <div id="guides" class="tab-content">
                 <div class="admin-header">
                     <h1>🧭 Управление гидами</h1>
-                    <button class="btn-add" onclick="openGuideForm()">➕ Добавить гида</button>
+                    <button id="addGuideBtn" class="btn-add">➕ Добавить гида</button>
                 </div>
                 <div class="table-container">
                     <table id="guidesTable">
@@ -153,7 +153,7 @@
             <div id="rentals" class="tab-content">
                 <div class="admin-header">
                     <h1>🚗 Управление арендой</h1>
-                    <button class="btn-add" onclick="openRentalForm()">➕ Добавить транспорт</button>
+                    <button id="addRentalBtn" class="btn-add">➕ Добавить транспорт</button>
                 </div>
                 <div class="table-container">
                     <table id="rentalsTable">
@@ -203,7 +203,7 @@
             <div id="reviews" class="tab-content">
                 <div class="admin-header">
                     <h1>⭐ Управление отзывами</h1>
-                    <button class="btn-add" onclick="openReviewForm()">➕ Добавить отзыв</button>
+                    <button id="addReviewBtn" class="btn-add">➕ Добавить отзыв</button>
                 </div>
                 <div class="table-container">
                     <table id="reviewsTable">
@@ -242,7 +242,7 @@
                         <label>Телефон</label>
                         <input type="tel" id="adminPhone" value="+7 (999) 123-45-67">
                     </div>
-                    <button onclick="saveSettings()" class="btn-primary">💾 Сохранить настройки</button>
+                    <button id="saveSettingsBtn" class="btn-primary">💾 Сохранить настройки</button>
                 </div>
             </div>
         </main>
@@ -251,7 +251,7 @@
     <!-- Модалка для форм -->
     <div class="modal-overlay" id="adminModal">
         <div class="modal-content modal-large">
-            <span class="modal-close" onclick="closeAdminModal()">✕</span>
+            <span id="modalCloseBtn" class="modal-close">✕</span>
             <div id="adminModalContent"></div>
         </div>
     </div>

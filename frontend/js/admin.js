@@ -1,580 +1,314 @@
-// ==================== НАВИГАЦИЯ ====================
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', function() {
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        this.classList.add('active');
-        
-        const tab = this.dataset.tab;
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.getElementById(tab).classList.add('active');
-        
-        // Загружаем данные для вкладки
-        loadTabData(tab);
+console.log('✅ Админ-панель загружена');
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Навигация
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            this.classList.add('active');
+            const tab = this.dataset.tab;
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            const target = document.getElementById(tab);
+            if (target) target.classList.add('active');
+            loadTabData(tab);
+        });
     });
+
+    // Кнопки
+    document.getElementById('addTourBtn').addEventListener('click', () => openForm('tour'));
+    document.getElementById('addGuideBtn').addEventListener('click', () => openForm('guide'));
+    document.getElementById('addRentalBtn').addEventListener('click', () => openForm('rental'));
+    document.getElementById('refreshBtn').addEventListener('click', refreshData);
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => alert('✅ Сохранено'));
+    document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+    document.getElementById('adminModal').addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    loadDashboard();
 });
 
-// ==================== ЗАГРУЗКА ДАННЫХ ====================
 function loadTabData(tab) {
-    switch(tab) {
-        case 'dashboard': loadDashboard(); break;
-        case 'tours': loadTours(); break;
-        case 'guides': loadGuides(); break;
-        case 'rentals': loadRentals(); break;
-        case 'bookings': loadBookings(); break;
-        case 'reviews': loadReviews(); break;
-    }
+    if (tab === 'dashboard') loadDashboard();
+    else if (tab === 'tours') loadTours();
+    else if (tab === 'guides') loadGuides();
+    else if (tab === 'rentals') loadRentals();
+    else if (tab === 'bookings') loadBookings();
 }
 
-// ==================== ДАШБОРД ====================
 async function loadDashboard() {
     try {
-        const [tours, guides, rentals, bookings, reviews] = await Promise.all([
-            fetch('/api/tours').then(r => r.json()),
-            fetch('/api/guides').then(r => r.json()),
-            fetch('/api/rentals').then(r => r.json()),
-            fetch('/api/bookings').then(r => r.json()),
-            fetch('/api/reviews').then(r => r.json()).catch(() => [])
+        const [tours, guides, rentals, bookings] = await Promise.all([
+            fetch('/api/tours').then(r => r.json()).catch(() => []),
+            fetch('/api/guides').then(r => r.json()).catch(() => []),
+            fetch('/api/rentals').then(r => r.json()).catch(() => []),
+            fetch('/api/bookings').then(r => r.json()).catch(() => [])
         ]);
-        
         document.getElementById('statTours').textContent = tours.length;
         document.getElementById('statGuides').textContent = guides.length;
         document.getElementById('statRentals').textContent = rentals.length;
         document.getElementById('statBookings').textContent = bookings.length;
-        document.getElementById('statReviews').textContent = reviews.length || 0;
-        
-        // Последние бронирования
-        const recent = bookings.slice(0, 5);
-        const list = document.getElementById('recentBookingsList');
-        if (recent.length === 0) {
-            list.innerHTML = '<p class="loading">Нет бронирований</p>';
-        } else {
-            list.innerHTML = recent.map(b => `
-                <div class="booking-item">
-                    <strong>${b.user_name}</strong> - ${b.service_type}
-                    <span class="status-${b.status || 'pending'}">${b.status || 'pending'}</span>
-                    <small>${new Date(b.created_at).toLocaleDateString()}</small>
-                </div>
-            `).join('');
-        }
-    } catch (error) {
-        console.error('Ошибка загрузки дашборда:', error);
-    }
+    } catch(e) { console.error(e); }
 }
 
-// ==================== ТУРЫ ====================
 async function loadTours() {
     try {
-        const response = await fetch('/api/tours');
-        const tours = await response.json();
+        const data = await fetch('/api/tours').then(r => r.json());
         const tbody = document.getElementById('toursTableBody');
-        
-        if (tours.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="loading">Нет туров</td></tr>';
-            return;
-        }
-        
-        tbody.innerHTML = tours.map(tour => `
+        if (!data.length) { tbody.innerHTML = '<tr><td colspan="6">Нет туров</td></tr>'; return; }
+        tbody.innerHTML = data.map(t => `
             <tr>
-                <td>${tour.id}</td>
-                <td>${tour.title}</td>
-                <td>${tour.type || '—'}</td>
-                <td>${tour.price.toLocaleString()} ₽</td>
-                <td>${tour.duration || '—'}</td>
+                <td>${t.id}</td>
+                <td>${t.title}</td>
+                <td>${t.type || '—'}</td>
+                <td>${t.price ? t.price + ' ₽' : '—'}</td>
+                <td>${t.duration || '—'}</td>
                 <td>
-                    <button class="btn-edit" onclick="editTour(${tour.id})">✏️</button>
-                    <button class="btn-delete" onclick="deleteTour(${tour.id})">🗑️</button>
+                    <button class="btn-edit" data-id="${t.id}">✏️</button>
+                    <button class="btn-delete" data-id="${t.id}">🗑️</button>
                 </td>
             </tr>
         `).join('');
-    } catch (error) {
-        console.error('Ошибка загрузки туров:', error);
-    }
+        tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editItem('tour', b.dataset.id)));
+        tbody.querySelectorAll('.btn-delete').forEach(b => b.addEventListener('click', () => deleteItem('tour', b.dataset.id)));
+    } catch(e) { console.error(e); }
 }
 
-function openTourForm(data = null) {
-    const isEdit = !!data;
+async function loadGuides() {
+    try {
+        const data = await fetch('/api/guides').then(r => r.json());
+        const tbody = document.getElementById('guidesTableBody');
+        if (!data.length) { tbody.innerHTML = '<tr><td colspan="6">Нет гидов</td></tr>'; return; }
+        tbody.innerHTML = data.map(g => `
+            <tr>
+                <td>${g.id}</td>
+                <td>${g.name}</td>
+                <td>${g.specialty || '—'}</td>
+                <td>${g.experience || 0} лет</td>
+                <td>${'⭐'.repeat(Math.round(g.rating || 0))}</td>
+                <td>
+                    <button class="btn-edit" data-id="${g.id}">✏️</button>
+                    <button class="btn-delete" data-id="${g.id}">🗑️</button>
+                </td>
+            </tr>
+        `).join('');
+        tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editItem('guide', b.dataset.id)));
+        tbody.querySelectorAll('.btn-delete').forEach(b => b.addEventListener('click', () => deleteItem('guide', b.dataset.id)));
+    } catch(e) { console.error(e); }
+}
+
+async function loadRentals() {
+    try {
+        const data = await fetch('/api/rentals').then(r => r.json());
+        const tbody = document.getElementById('rentalsTableBody');
+        if (!data.length) { tbody.innerHTML = '<tr><td colspan="6">Нет транспорта</td></tr>'; return; }
+        tbody.innerHTML = data.map(r => `
+            <tr>
+                <td>${r.id}</td>
+                <td>${r.type}</td>
+                <td>${r.name}</td>
+                <td>${r.price_per_day ? r.price_per_day + ' ₽' : '—'}</td>
+                <td>${r.available ? '✅ Да' : '❌ Нет'}</td>
+                <td>
+                    <button class="btn-edit" data-id="${r.id}">✏️</button>
+                    <button class="btn-delete" data-id="${r.id}">🗑️</button>
+                </td>
+            </tr>
+        `).join('');
+        tbody.querySelectorAll('.btn-edit').forEach(b => b.addEventListener('click', () => editItem('rental', b.dataset.id)));
+        tbody.querySelectorAll('.btn-delete').forEach(b => b.addEventListener('click', () => deleteItem('rental', b.dataset.id)));
+    } catch(e) { console.error(e); }
+}
+
+async function loadBookings() {
+    try {
+        const data = await fetch('/api/bookings').then(r => r.json());
+        const tbody = document.getElementById('bookingsTableBody');
+        if (!data.length) { tbody.innerHTML = '<tr><td colspan="7">Нет бронирований</td></tr>'; return; }
+        tbody.innerHTML = data.map(b => `
+            <tr>
+                <td>${b.id}</td>
+                <td>${b.user_name}</td>
+                <td>${b.user_phone}</td>
+                <td>${b.service_type}</td>
+                <td>${b.booking_date || '—'}</td>
+                <td><span class="status-${b.status || 'pending'}">${b.status || 'pending'}</span></td>
+                <td>
+                    <select class="status-select" data-id="${b.id}">
+                        <option value="pending" ${b.status === 'pending' ? 'selected' : ''}>Ожидает</option>
+                        <option value="confirmed" ${b.status === 'confirmed' ? 'selected' : ''}>Подтвержден</option>
+                        <option value="completed" ${b.status === 'completed' ? 'selected' : ''}>Выполнен</option>
+                        <option value="cancelled" ${b.status === 'cancelled' ? 'selected' : ''}>Отменен</option>
+                    </select>
+                </td>
+            </tr>
+        `).join('');
+        tbody.querySelectorAll('.status-select').forEach(s => s.addEventListener('change', function() {
+            fetch(`/api/bookings/${this.dataset.id}/status`, {
+                method: 'PATCH',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({status: this.value})
+            }).then(() => { alert('✅ Статус обновлен'); loadBookings(); });
+        }));
+    } catch(e) { console.error(e); }
+}
+
+function openForm(type, data = null) {
+    const modal = document.getElementById('adminModal');
     const content = document.getElementById('adminModalContent');
-    content.innerHTML = `
-        <h2>${isEdit ? '✏️ Редактировать тур' : '➕ Новый тур'}</h2>
-        <form class="admin-form" id="tourForm">
-            <div class="form-group">
-                <label>Название *</label>
-                <input type="text" id="tourTitle" value="${data?.title || ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="tourDescription">${data?.description || ''}</textarea>
-            </div>
+    
+    let fields = '';
+    if (type === 'tour') {
+        fields = `
+            <div class="form-group"><label>Название</label><input type="text" id="f_title" value="${data?.title || ''}" required></div>
+            <div class="form-group"><label>Описание</label><textarea id="f_desc">${data?.description || ''}</textarea></div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Цена *</label>
-                    <input type="number" id="tourPrice" value="${data?.price || ''}" required>
-                </div>
-                <div class="form-group">
-                    <label>Длительность</label>
-                    <input type="text" id="tourDuration" value="${data?.duration || ''}" placeholder="7 дней">
-                </div>
+                <div class="form-group"><label>Цена</label><input type="number" id="f_price" value="${data?.price || ''}" required></div>
+                <div class="form-group"><label>Длительность</label><input type="text" id="f_duration" value="${data?.duration || ''}" placeholder="7 дней"></div>
             </div>
-            <div class="form-group">
-                <label>Тип</label>
-                <select id="tourType">
+            <div class="form-group"><label>Тип</label>
+                <select id="f_type">
                     <option value="climbing" ${data?.type === 'climbing' ? 'selected' : ''}>Восхождение</option>
                     <option value="gastro" ${data?.type === 'gastro' ? 'selected' : ''}>Гастрономия</option>
                     <option value="trekking" ${data?.type === 'trekking' ? 'selected' : ''}>Треккинг</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Изображение (URL)</label>
-                <input type="text" id="tourImage" value="${data?.image || ''}" placeholder="elbrus.jpg">
-            </div>
-            <button type="submit" class="btn-primary">💾 Сохранить</button>
-        </form>
-    `;
-    
-    document.getElementById('adminModal').classList.add('active');
-    
-    document.getElementById('tourForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveTour(data?.id);
-    });
-}
-
-async function saveTour(id) {
-    const tour = {
-        title: document.getElementById('tourTitle').value.trim(),
-        description: document.getElementById('tourDescription').value.trim(),
-        price: parseInt(document.getElementById('tourPrice').value),
-        duration: document.getElementById('tourDuration').value.trim(),
-        type: document.getElementById('tourType').value,
-        image: document.getElementById('tourImage').value.trim()
-    };
-    
-    if (!tour.title || !tour.price) {
-        alert('Заполните обязательные поля!');
-        return;
-    }
-    
-    try {
-        const url = id ? `/api/tours/${id}` : '/api/tours';
-        const method = id ? 'PUT' : 'POST';
-        
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(tour)
-        });
-        
-        if (response.ok) {
-            alert(id ? '✅ Тур обновлен!' : '✅ Тур создан!');
-            closeAdminModal();
-            loadTours();
-        } else {
-            const error = await response.json();
-            alert('❌ Ошибка: ' + error.error);
-        }
-    } catch (error) {
-        console.error('Ошибка сохранения:', error);
-        alert('❌ Произошла ошибка');
-    }
-}
-
-function editTour(id) {
-    fetch(`/api/tours/${id}`)
-        .then(r => r.json())
-        .then(tour => openTourForm(tour))
-        .catch(err => console.error(err));
-}
-
-async function deleteTour(id) {
-    if (!confirm('Удалить тур?')) return;
-    
-    try {
-        const response = await fetch(`/api/tours/${id}`, {
-            method: 'DELETE'
-        });
-        
-        if (response.ok) {
-            alert('✅ Тур удален');
-            loadTours();
-        } else {
-            alert('❌ Ошибка удаления');
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
-}
-
-// ==================== ГИДЫ ====================
-async function loadGuides() {
-    try {
-        const response = await fetch('/api/guides');
-        const guides = await response.json();
-        const tbody = document.getElementById('guidesTableBody');
-        
-        if (guides.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="loading">Нет гидов</td></tr>';
-            return;
-        }
-        
-        tbody.innerHTML = guides.map(guide => `
-            <tr>
-                <td>${guide.id}</td>
-                <td>${guide.name}</td>
-                <td>${guide.specialty || '—'}</td>
-                <td>${guide.experience || 0} лет</td>
-                <td>${'⭐'.repeat(Math.round(guide.rating || 0))}</td>
-                <td>
-                    <button class="btn-edit" onclick="editGuide(${guide.id})">✏️</button>
-                    <button class="btn-delete" onclick="deleteGuide(${guide.id})">🗑️</button>
-                </td>
-            </tr>
-        `).join('');
-    } catch (error) {
-        console.error('Ошибка загрузки гидов:', error);
-    }
-}
-
-function openGuideForm(data = null) {
-    const isEdit = !!data;
-    const content = document.getElementById('adminModalContent');
-    content.innerHTML = `
-        <h2>${isEdit ? '✏️ Редактировать гида' : '➕ Новый гид'}</h2>
-        <form class="admin-form" id="guideForm">
-            <div class="form-group">
-                <label>Имя *</label>
-                <input type="text" id="guideName" value="${data?.name || ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Специализация</label>
-                <input type="text" id="guideSpecialty" value="${data?.specialty || ''}">
+        `;
+    } else if (type === 'guide') {
+        fields = `
+            <div class="form-group"><label>Имя</label><input type="text" id="f_name" value="${data?.name || ''}" required></div>
+            <div class="form-group"><label>Специализация</label><input type="text" id="f_specialty" value="${data?.specialty || ''}"></div>
+            <div class="form-row">
+                <div class="form-group"><label>Опыт</label><input type="number" id="f_experience" value="${data?.experience || 0}"></div>
+                <div class="form-group"><label>Рейтинг</label><input type="number" step="0.1" id="f_rating" value="${data?.rating || 0}"></div>
             </div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Опыт (лет)</label>
-                    <input type="number" id="guideExperience" value="${data?.experience || 0}">
-                </div>
-                <div class="form-group">
-                    <label>Рейтинг</label>
-                    <input type="number" step="0.1" id="guideRating" value="${data?.rating || 0}">
-                </div>
+                <div class="form-group"><label>Телефон</label><input type="tel" id="f_phone" value="${data?.phone || ''}" required></div>
+                <div class="form-group"><label>Email</label><input type="email" id="f_email" value="${data?.email || ''}"></div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Телефон *</label>
-                    <input type="tel" id="guidePhone" value="${data?.phone || ''}" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="guideEmail" value="${data?.email || ''}">
-                </div>
-            </div>
-            <button type="submit" class="btn-primary">💾 Сохранить</button>
-        </form>
-    `;
-    
-    document.getElementById('adminModal').classList.add('active');
-    
-    document.getElementById('guideForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveGuide(data?.id);
-    });
-}
-
-async function saveGuide(id) {
-    const guide = {
-        name: document.getElementById('guideName').value.trim(),
-        specialty: document.getElementById('guideSpecialty').value.trim(),
-        experience: parseInt(document.getElementById('guideExperience').value) || 0,
-        rating: parseFloat(document.getElementById('guideRating').value) || 0,
-        phone: document.getElementById('guidePhone').value.trim(),
-        email: document.getElementById('guideEmail').value.trim()
-    };
-    
-    if (!guide.name || !guide.phone) {
-        alert('Имя и телефон обязательны!');
-        return;
-    }
-    
-    try {
-        const url = id ? `/api/guides/${id}` : '/api/guides';
-        const method = id ? 'PUT' : 'POST';
-        
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(guide)
-        });
-        
-        if (response.ok) {
-            alert(id ? '✅ Гид обновлен!' : '✅ Гид создан!');
-            closeAdminModal();
-            loadGuides();
-        } else {
-            const error = await response.json();
-            alert('❌ Ошибка: ' + error.error);
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
-}
-
-function editGuide(id) {
-    fetch(`/api/guides/${id}`)
-        .then(r => r.json())
-        .then(guide => openGuideForm(guide))
-        .catch(err => console.error(err));
-}
-
-async function deleteGuide(id) {
-    if (!confirm('Удалить гида?')) return;
-    try {
-        await fetch(`/api/guides/${id}`, { method: 'DELETE' });
-        alert('✅ Гид удален');
-        loadGuides();
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
-}
-
-// ==================== АРЕНДА ====================
-async function loadRentals() {
-    try {
-        const response = await fetch('/api/rentals');
-        const rentals = await response.json();
-        const tbody = document.getElementById('rentalsTableBody');
-        
-        if (rentals.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" class="loading">Нет транспорта</td></tr>';
-            return;
-        }
-        
-        tbody.innerHTML = rentals.map(rental => `
-            <tr>
-                <td>${rental.id}</td>
-                <td>${getRentalEmoji(rental.type)} ${rental.type}</td>
-                <td>${rental.name}</td>
-                <td>${rental.price_per_day.toLocaleString()} ₽</td>
-                <td>${rental.available ? '✅ Да' : '❌ Нет'}</td>
-                <td>
-                    <button class="btn-edit" onclick="editRental(${rental.id})">✏️</button>
-                    <button class="btn-delete" onclick="deleteRental(${rental.id})">🗑️</button>
-                </td>
-            </tr>
-        `).join('');
-    } catch (error) {
-        console.error('Ошибка загрузки аренды:', error);
-    }
-}
-
-function getRentalEmoji(type) {
-    const emojis = { 'car': '🚗', 'bike': '🏍️', 'bicycle': '🚲', 'transfer': '🚐' };
-    return emojis[type] || '🚙';
-}
-
-function openRentalForm(data = null) {
-    const isEdit = !!data;
-    const content = document.getElementById('adminModalContent');
-    content.innerHTML = `
-        <h2>${isEdit ? '✏️ Редактировать транспорт' : '➕ Добавить транспорт'}</h2>
-        <form class="admin-form" id="rentalForm">
-            <div class="form-group">
-                <label>Тип *</label>
-                <select id="rentalType">
+        `;
+    } else if (type === 'rental') {
+        fields = `
+            <div class="form-group"><label>Тип</label>
+                <select id="f_rental_type">
                     <option value="car" ${data?.type === 'car' ? 'selected' : ''}>Автомобиль</option>
                     <option value="bike" ${data?.type === 'bike' ? 'selected' : ''}>Байк</option>
                     <option value="bicycle" ${data?.type === 'bicycle' ? 'selected' : ''}>Велосипед</option>
                     <option value="transfer" ${data?.type === 'transfer' ? 'selected' : ''}>Трансфер</option>
                 </select>
             </div>
-            <div class="form-group">
-                <label>Название *</label>
-                <input type="text" id="rentalName" value="${data?.name || ''}" required>
-            </div>
-            <div class="form-group">
-                <label>Описание</label>
-                <textarea id="rentalDescription">${data?.description || ''}</textarea>
-            </div>
+            <div class="form-group"><label>Название</label><input type="text" id="f_rental_name" value="${data?.name || ''}" required></div>
+            <div class="form-group"><label>Описание</label><textarea id="f_rental_desc">${data?.description || ''}</textarea></div>
             <div class="form-row">
-                <div class="form-group">
-                    <label>Цена за день *</label>
-                    <input type="number" id="rentalPrice" value="${data?.price_per_day || ''}" required>
-                </div>
-                <div class="form-group">
-                    <label>Доступно</label>
-                    <select id="rentalAvailable">
+                <div class="form-group"><label>Цена за день</label><input type="number" id="f_rental_price" value="${data?.price_per_day || ''}" required></div>
+                <div class="form-group"><label>Доступно</label>
+                    <select id="f_rental_available">
                         <option value="1" ${data?.available === 1 ? 'selected' : ''}>Да</option>
                         <option value="0" ${data?.available === 0 ? 'selected' : ''}>Нет</option>
                     </select>
                 </div>
             </div>
+        `;
+    }
+    
+    content.innerHTML = `
+        <h2>${data ? '✏️ Редактировать' : '➕ Добавить'}</h2>
+        <form class="admin-form" id="editForm">
+            ${fields}
             <button type="submit" class="btn-primary">💾 Сохранить</button>
         </form>
     `;
     
-    document.getElementById('adminModal').classList.add('active');
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
     
-    document.getElementById('rentalForm').addEventListener('submit', function(e) {
+    document.getElementById('editForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        saveRental(data?.id);
+        saveItem(type, data?.id || null);
     });
 }
 
-async function saveRental(id) {
-    const rental = {
-        type: document.getElementById('rentalType').value,
-        name: document.getElementById('rentalName').value.trim(),
-        description: document.getElementById('rentalDescription').value.trim(),
-        price_per_day: parseInt(document.getElementById('rentalPrice').value),
-        available: parseInt(document.getElementById('rentalAvailable').value)
-    };
-    
-    if (!rental.name || !rental.price_per_day) {
-        alert('Заполните обязательные поля!');
-        return;
+async function saveItem(type, id) {
+    let data = {};
+    if (type === 'tour') {
+        data = {
+            title: document.getElementById('f_title').value.trim(),
+            description: document.getElementById('f_desc').value.trim(),
+            price: parseInt(document.getElementById('f_price').value),
+            duration: document.getElementById('f_duration').value.trim(),
+            type: document.getElementById('f_type').value,
+            image: ''
+        };
+        if (!data.title || !data.price) { alert('Заполните название и цену'); return; }
+    } else if (type === 'guide') {
+        data = {
+            name: document.getElementById('f_name').value.trim(),
+            specialty: document.getElementById('f_specialty').value.trim(),
+            experience: parseInt(document.getElementById('f_experience').value) || 0,
+            rating: parseFloat(document.getElementById('f_rating').value) || 0,
+            phone: document.getElementById('f_phone').value.trim(),
+            email: document.getElementById('f_email').value.trim()
+        };
+        if (!data.name || !data.phone) { alert('Заполните имя и телефон'); return; }
+    } else if (type === 'rental') {
+        data = {
+            type: document.getElementById('f_rental_type').value,
+            name: document.getElementById('f_rental_name').value.trim(),
+            description: document.getElementById('f_rental_desc').value.trim(),
+            price_per_day: parseInt(document.getElementById('f_rental_price').value),
+            available: parseInt(document.getElementById('f_rental_available').value),
+            image: ''
+        };
+        if (!data.name || !data.price_per_day) { alert('Заполните название и цену'); return; }
     }
     
     try {
-        const url = id ? `/api/rentals/${id}` : '/api/rentals';
+        const url = id ? `/api/${type}s/${id}` : `/api/${type}s`;
         const method = id ? 'PUT' : 'POST';
-        
         const response = await fetch(url, {
             method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(rental)
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
         });
-        
         if (response.ok) {
-            alert(id ? '✅ Транспорт обновлен!' : '✅ Транспорт добавлен!');
-            closeAdminModal();
-            loadRentals();
+            alert(id ? '✅ Обновлено!' : '✅ Создано!');
+            closeModal();
+            loadTabData(type + 's');
+            loadDashboard();
         } else {
-            const error = await response.json();
-            alert('❌ Ошибка: ' + error.error);
+            const err = await response.json();
+            alert('❌ Ошибка: ' + (err.error || 'Неизвестно'));
         }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
+    } catch(e) { console.error(e); alert('❌ Ошибка'); }
 }
 
-function editRental(id) {
-    fetch(`/api/rentals/${id}`)
-        .then(r => r.json())
-        .then(rental => openRentalForm(rental))
-        .catch(err => console.error(err));
+async function editItem(type, id) {
+    const data = await fetch(`/api/${type}s/${id}`).then(r => r.json());
+    openForm(type, data);
 }
 
-async function deleteRental(id) {
-    if (!confirm('Удалить транспорт?')) return;
-    try {
-        await fetch(`/api/rentals/${id}`, { method: 'DELETE' });
-        alert('✅ Транспорт удален');
-        loadRentals();
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
+async function deleteItem(type, id) {
+    if (!confirm('Удалить?')) return;
+    await fetch(`/api/${type}s/${id}`, { method: 'DELETE' });
+    alert('✅ Удалено');
+    loadTabData(type + 's');
+    loadDashboard();
 }
 
-// ==================== БРОНИРОВАНИЯ ====================
-async function loadBookings() {
-    try {
-        const response = await fetch('/api/bookings');
-        const bookings = await response.json();
-        const tbody = document.getElementById('bookingsTableBody');
-        
-        if (bookings.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" class="loading">Нет бронирований</td></tr>';
-            return;
-        }
-        
-        tbody.innerHTML = bookings.map(booking => `
-            <tr>
-                <td>${booking.id}</td>
-                <td>${booking.user_name}</td>
-                <td>${booking.user_phone}</td>
-                <td>${booking.service_type}</td>
-                <td>${booking.booking_date || '—'}</td>
-                <td>
-                    <span class="status-${booking.status || 'pending'}">
-                        ${booking.status || 'pending'}
-                    </span>
-                </td>
-                <td>
-                    <select onchange="updateBookingStatus(${booking.id}, this.value)" class="btn-status">
-                        <option value="pending" ${booking.status === 'pending' ? 'selected' : ''}>⏳ Ожидает</option>
-                        <option value="confirmed" ${booking.status === 'confirmed' ? 'selected' : ''}>✅ Подтвержден</option>
-                        <option value="completed" ${booking.status === 'completed' ? 'selected' : ''}>✅ Выполнен</option>
-                        <option value="cancelled" ${booking.status === 'cancelled' ? 'selected' : ''}>❌ Отменен</option>
-                    </select>
-                </td>
-            </tr>
-        `).join('');
-    } catch (error) {
-        console.error('Ошибка загрузки бронирований:', error);
-    }
-}
-
-async function updateBookingStatus(id, status) {
-    try {
-        const response = await fetch(`/api/bookings/${id}/status`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ status })
-        });
-        
-        if (response.ok) {
-            alert('✅ Статус обновлен!');
-            loadBookings();
-        } else {
-            alert('❌ Ошибка обновления');
-        }
-    } catch (error) {
-        console.error('Ошибка:', error);
-    }
-}
-
-// ==================== ОТЗЫВЫ ====================
-function loadReviews() {
-    // Заглушка - позже добавим полноценную работу с отзывами
-    document.getElementById('reviewsTableBody').innerHTML = `
-        <tr><td colspan="6" class="loading">Функция в разработке ⏳</td></tr>
-    `;
-}
-
-function openReviewForm() {
-    alert('Функция добавления отзывов будет доступна позже!');
-}
-
-// ==================== НАСТРОЙКИ ====================
-function saveSettings() {
-    alert('✅ Настройки сохранены!');
-}
-
-// ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
-function closeAdminModal() {
+function closeModal() {
     document.getElementById('adminModal').classList.remove('active');
+    document.body.style.overflow = '';
 }
 
 function refreshData() {
     loadDashboard();
-    alert('🔄 Данные обновлены!');
+    alert('🔄 Обновлено');
 }
 
 function logout() {
-    if (confirm('Выйти из админ-панели?')) {
-        location.href = 'index.html';
-    }
+    if (confirm('Выйти?')) location.href = 'index.html';
 }
 
-// ==================== ЗАПУСК ====================
-document.addEventListener('DOMContentLoaded', function() {
-    loadDashboard();
-    
-    // Закрытие модалки по клику вне
-    document.getElementById('adminModal').addEventListener('click', function(e) {
-        if (e.target === this) closeAdminModal();
-    });
-});
-
-// ==================== ДОПОЛНИТЕЛЬНЫЕ МЕТОДЫ ДЛЯ API ====================
-// Заглушки для PUT и DELETE методов - добавим позже в сервер
-console.log('👨‍💼 Админ-панель загружена!');
+// Вызов для отзывов
+document.getElementById('addReviewBtn')?.addEventListener('click', () => alert('⏳ В разработке'));
